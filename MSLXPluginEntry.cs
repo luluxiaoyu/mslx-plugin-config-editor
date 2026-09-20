@@ -12,10 +12,10 @@ public class MSLXPluginEntry : IPlugin
     public static MSLXPluginEntry Instance { get; private set; } = null!;
     
     public string Id => "mslx-plugin-config-editor";
-    public string Name => "插件可视化配置";
+    public string Name => "插件可视化配置管理";
     public string Description => "在实例设置中可视化配置插件的配置文件，带有中文提示和选项渲染等高级功能。（欢迎贡献中文注释呀！）";
     public string Version => "1.0.1";
-    public string Icon => "https://www.mslmc.cn/logo.png";
+    public string Icon => "icon.png";
     public string MinSDKVersion => "1.6.4";
     public string Developer => "xiaoyu";
     public string AuthorUrl => "https://github.com/luluxiaoyu/mslx-plugin-config-editor";

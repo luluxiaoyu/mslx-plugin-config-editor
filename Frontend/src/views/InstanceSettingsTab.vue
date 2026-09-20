@@ -181,8 +181,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef, computed, onMounted, watch, nextTick } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref, shallowRef, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { MessagePlugin, DialogPlugin } from 'tdesign-vue-next';
 import {
   FileIcon,
@@ -228,7 +228,6 @@ const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const router = useRouter();
 const route = useRoute();
 
 // 当前实例 ID 计算

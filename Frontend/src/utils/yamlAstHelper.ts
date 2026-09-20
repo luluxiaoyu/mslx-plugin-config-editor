@@ -40,15 +40,15 @@ function extractComments(node: any, path: string[], result: CommentMap) {
 
   if (YAML.isMap(node)) {
     for (let i = 0; i < node.items.length; i++) {
-      const item = node.items[i];
+      const item = node.items[i] as any;
       if (!item || !item.key) continue;
-      const keyStr = String(item.key.value ?? item.key);
+      const keyStr = String(item.key?.value ?? item.key);
       const currentPath = [...path, keyStr];
       const pathKey = currentPath.join('.');
 
       let commentBefore = item.key?.commentBefore || item.commentBefore;
-      if (i === 0 && !commentBefore && node.commentBefore) {
-        commentBefore = node.commentBefore;
+      if (i === 0 && !commentBefore && (node as any).commentBefore) {
+        commentBefore = (node as any).commentBefore;
       }
       const inlineComment = item.value?.comment || item.comment;
 
@@ -65,7 +65,7 @@ function extractComments(node: any, path: string[], result: CommentMap) {
     }
   } else if (YAML.isSeq(node)) {
     for (let i = 0; i < node.items.length; i++) {
-      const item = node.items[i];
+      const item = node.items[i] as any;
       const currentPath = [...path, String(i)];
       const pathKey = currentPath.join('.');
       const commentBefore = item?.commentBefore;
@@ -126,7 +126,7 @@ export function addYamlPair(
 ): string {
   const pair = doc.createPair(key, value);
   if (comment && comment.trim()) {
-    pair.key.commentBefore = ' ' + comment.trim().split('\n').join('\n ');
+    (pair.key as any).commentBefore = ' ' + comment.trim().split('\n').join('\n ');
   }
   if (parentPath.length === 0) {
     if (!doc.contents) {
