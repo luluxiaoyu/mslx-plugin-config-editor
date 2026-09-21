@@ -14,7 +14,7 @@ public class MSLXPluginEntry : IPlugin
     public string Id => "mslx-plugin-config-editor";
     public string Name => "插件可视化配置管理";
     public string Description => "在实例设置中可视化配置插件的配置文件，带有中文提示和选项渲染等高级功能。（欢迎贡献中文注释呀！）";
-    public string Version => "1.0.2";
+    public string Version => "1.0.3";
     public string Icon => "icon.png";
     public string MinSDKVersion => "1.6.4";
     public string Developer => "xiaoyu";

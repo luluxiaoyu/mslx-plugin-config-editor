@@ -150,11 +150,69 @@
         <!-- 空状态 -->
         <div
           v-else
-          class="w-full h-full flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 p-8 text-center"
+          class="w-full h-full flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 p-8 text-center overflow-y-auto"
         >
           <extension-icon size="48px" class="opacity-30 mb-3" />
           <p class="text-sm font-medium mb-1">请在左侧选择一个插件配置文件开始编辑</p>
           <p class="text-xs text-zinc-400">支持可视化键值表单、YAML/JSON/TOML 源码高亮与快捷键保存 (Ctrl+S / ⌘S)</p>
+
+          <!-- 贡献引导 -->
+          <div
+            class="mt-6 px-4 py-3 rounded-lg border border-zinc-200/70 dark:border-zinc-700/60 bg-zinc-50/60 dark:bg-zinc-800/40 max-w-sm w-full"
+          >
+            <div class="flex items-center justify-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+              <svg viewBox="0 0 16 16" class="w-4 h-4 fill-current" aria-hidden="true">
+                <path
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+                />
+              </svg>
+              <span>想让常用插件的中文化注释更完善？</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 dark:text-zinc-500 mt-1.5 leading-relaxed">
+              本编辑器的插件注释数据由社区维护，欢迎到 GitHub 仓库
+              <a
+                :href="REPO_URL"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline decoration-dotted underline-offset-2"
+              >贡献一份注释</a>
+              ，帮助更多人轻松看懂插件配置。
+            </p>
+
+            <!-- 贡献者列表 -->
+            <div class="mt-3 pt-3 border-t border-zinc-200/70 dark:border-zinc-700/60">
+              <template v-if="contributors.length > 0">
+                <p class="text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">
+                  ❤ 这些伙伴贡献了插件注释
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-2.5">
+                  <a
+                    v-for="c in contributors"
+                    :key="c.login"
+                    :href="c.html_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex flex-col items-center gap-1 w-12 group"
+                    :title="c.login"
+                  >
+                    <img
+                      :src="GITHUB_AVATAR_PROXY + c.avatar_url"
+                      :alt="c.login"
+                      loading="lazy"
+                      class="w-8 h-8 rounded-full ring-1 ring-zinc-200 dark:ring-zinc-700 group-hover:ring-blue-400 transition-all"
+                      @error="($event.target as HTMLImageElement).src = c.avatar_url"
+                    />
+                    <span class="text-[10px] text-zinc-400 dark:text-zinc-500 truncate w-full text-center group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                      {{ c.login }}
+                    </span>
+                  </a>
+                </div>
+              </template>
+              <p v-else class="text-[11px] text-zinc-400 dark:text-zinc-500">
+                {{ contributorsLoading ? '正在获取贡献者列表...' : '' }}
+              </p>
+            </div>
+          </div>
         </div>
 
         <!-- 内容加载遮罩 -->
@@ -256,6 +314,38 @@ const savedContent = ref('');
 
 const showDiffModal = ref(false);
 const templateDefaultContent = ref('');
+
+// GitHub 贡献引导
+const REPO_URL = 'https://github.com/luluxiaoyu/mslx-plugin-config-editor';
+// 头像加速代理地址
+const GITHUB_AVATAR_PROXY = 'https://hk-gh.mslmc.cn/';
+
+interface GithubContributor {
+  login: string;
+  avatar_url: string;
+  html_url: string;
+  contributions: number;
+}
+
+const contributors = ref<GithubContributor[]>([]);
+const contributorsLoading = ref(false);
+
+const fetchContributors = async () => {
+  if (contributors.value.length > 0) return;
+  contributorsLoading.value = true;
+  try {
+    const resp = await fetch('https://api.github.com/repos/luluxiaoyu/mslx-plugin-config-editor/contributors', {
+      headers: { Accept: 'application/vnd.github+json' },
+    });
+    if (!resp.ok) return;
+    const data = (await resp.json()) as GithubContributor[];
+    contributors.value = Array.isArray(data) ? data : [];
+  } catch {
+    // 网络异常时静默忽略，不影响主功能
+  } finally {
+    contributorsLoading.value = false;
+  }
+};
 
 // 是否有未保存修改
 const isDirty = computed(() => editorContent.value !== savedContent.value);
@@ -513,6 +603,7 @@ const openInFileManager = () => {
 
 onMounted(() => {
   fetchPluginList();
+  fetchContributors();
 });
 
 watch(
