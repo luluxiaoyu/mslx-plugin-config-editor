@@ -1,6 +1,6 @@
 <template>
   <div
-    class="config-editor-root w-full h-[calc(75vh-5rem)] md:h-[calc(72vh-3.5rem)] flex flex-col md:flex-row rounded-xl border border-zinc-200/80 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
+    class="config-editor-root w-full h-[75vh] md:h-[72vh] flex flex-col md:flex-row rounded-xl border border-zinc-200/80 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
   >
     <!-- 移动端：上方 / PC端：左侧 插件与文件树 -->
     <div
