@@ -1,0 +1,11 @@
+/* 当配置编辑器插件激活时，优化宿主祖先容器的布局与裁切特性 */
+.tab-panel-anim:has(> .config-editor-root) {
+  height: 100% !important;
+  content-visibility: visible !important;
+  contain: none !important;
+}
+
+.custom-scrollbar:has(.config-editor-root) {
+  padding-bottom: 0 !important;
+  overflow-y: hidden !important;
+}

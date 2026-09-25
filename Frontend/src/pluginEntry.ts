@@ -5,7 +5,7 @@ import './style.css';
 
 export const pluginConfig = {
   name: '服务端插件配置中心',
-  version: '1.0.3.3',
+  version: '1.0.6',
   description: '在实例设置中直接管理和编辑 Minecraft 服务端插件的配置文件',
   
   // 注入到实例配置侧边栏选项卡
