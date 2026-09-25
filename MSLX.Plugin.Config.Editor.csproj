@@ -4,9 +4,9 @@
     <AssemblyName>MSLX.Plugin.Config.Editor</AssemblyName>
     <RootNamespace>MSLX.Plugin.Config.Editor</RootNamespace>
     <TargetFramework>net10.0</TargetFramework>
-    <Version>1.0.0.19</Version>
-    <AssemblyVersion>1.0.0.19</AssemblyVersion>
-    <FileVersion>1.0.0.19</FileVersion>
+    <Version>1.0.3.2</Version>
+    <AssemblyVersion>1.0.3.2</AssemblyVersion>
+    <FileVersion>1.0.3.2</FileVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
